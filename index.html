@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>NoMoreLife</title>
+  <link rel="stylesheet" href="./style.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>صفحة الملاحظات</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Feedback Website NoMoreLife__</h1>
+    <form id="feedbackForm">
+      <label for="name" class="label-input">Name</label>
+      <input type="text" id="name" name="name" required>
+      <br>
+      <label for="email" class="label-input">Email:</label>
+      <input type="email" id="email" name="email" required>
+      <br>
+      <label for="feedback" class="label-input">feedback:</label>
+      <textarea id="feedback" name="feedback" required></textarea>
+      <br>
+      <button type="button" onclick="sendFeedback()" id="submitButton">SUBMIT</button>
+    </form>
+  </div>
+
+  <script>
+    function sendFeedback() {
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const feedback = document.getElementById('feedback').value;
+
+      if (!name || !email || !feedback) {
+        // عند عدم كتابة أي شيء في أحد المربعات المطلوبة، قم بإضافة تنسيق الأحمر
+        document.getElementById('name').style.border = name ? 'none' : '1px solid red';
+        document.getElementById('email').style.border = email ? 'none' : '1px solid red';
+        document.getElementById('feedback').style.border = feedback ? 'none' : '1px solid red';
+        return;
+      }
+
+      // قم بتغيير نص زر الإرسال إلى "Sending..." قبل إرسال الملاحظات
+      document.getElementById('submitButton').innerText = 'Sending...';
+
+      // قم بتغيير هذا الرابط إلى رابط الويبهوك الخاص بك من ديسكورد
+      const discordWebhookURL = 'https://discord.com/api/webhooks/1133864973819445299/hH4nkB8WNKrPxkpe95E1bL8nQPWfRP5iuoPKM-RByTccUjE_X16AamuHbT_SSFuOBTMB';
+
+      // بناء البيانات المطلوبة لإرسالها إلى ديسكورد
+      const data = {
+        content: `اسم المرسل: ${name}\nالبريد الإلكتروني: ${email}\nالملاحظات: ${feedback}`,
+      };
+
+      // إرسال البيانات إلى ديسكورد باستخدام Fetch API
+      fetch(discordWebhookURL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+        .then(() => {
+          // بعد إرسال الملاحظات بنجاح، قم بتأخير تغيير النص إلى "thx for send" بمدة 3 ثوانٍ
+          setTimeout(function() {
+            document.getElementById('submitButton').innerText = 'thx for send';
+          }, 2000);
+        })
+        .catch((error) => {
+          console.error('An error occurred while sending feedback to Discord:', error);
+          alert('An error occurred while sending feedback!');
+          // في حالة حدوث خطأ، قم بإعادة النص إلى "SUBMIT"
+          document.getElementById('submitButton').innerText = 'SUBMIT';
+        });
+    }
+  </script>
+</body>
+</html>
+<!-- partial -->
+  
+</body>
+</html>
